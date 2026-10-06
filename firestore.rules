@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isVerifiedWmuUser() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower().matches('.*@wmich[.]edu');
+    }
+
+    function isOwner(uid) {
+      return isVerifiedWmuUser() && request.auth.uid == uid;
+    }
+
+    function isRequiredString(value, maxLength) {
+      return value is string && value.size() > 0 && value.size() <= maxLength;
+    }
+
+    function isValidProfile(data) {
+      return data.keys().hasOnly(['firstName', 'lastName', 'preferredName', 'joinedTerm', 'requirements', 'updatedAt'])
+        && data.keys().hasAll(['firstName', 'lastName', 'preferredName', 'joinedTerm', 'requirements', 'updatedAt'])
+        && isRequiredString(data.firstName, 60)
+        && isRequiredString(data.lastName, 60)
+        && isRequiredString(data.preferredName, 60)
+        && isRequiredString(data.joinedTerm, 20)
+        && data.requirements is map
+        && data.requirements.size() <= 10
+        && data.updatedAt == request.time;
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow create, update: if isOwner(uid) && isValidProfile(request.resource.data);
+    }
+  }
+}
