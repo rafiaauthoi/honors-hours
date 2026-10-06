@@ -12,6 +12,7 @@ import {
   updateOrganization,
 } from "../lib/organizations";
 import type { Organization, OrganizationInput } from "../lib/organizations";
+import { organizationHasSessions } from "../lib/sessions";
 
 export default function Organizations() {
   const { user } = useAuth();
@@ -94,10 +95,25 @@ export default function Organizations() {
 
   async function handleDelete(organization: Organization) {
     if (!user) return;
-    const confirmed = window.confirm(`Delete ${organization.name}? This cannot be undone.`);
-    if (!confirmed) return;
     setError("");
     setNotice("");
+
+    try {
+      const hasSessions = await organizationHasSessions(user.uid, organization.id);
+      if (hasSessions) {
+        setError(
+          `${organization.name} has logged hours. Delete those sessions on the Log Hours page first.`
+        );
+        return;
+      }
+    } catch {
+      setError("Could not check for logged hours. Try again.");
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete ${organization.name}? This cannot be undone.`);
+    if (!confirmed) return;
+
     try {
       await deleteOrganization(user.uid, organization.id);
       setOrganizations((current) => current.filter((item) => item.id !== organization.id));

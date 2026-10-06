@@ -6,8 +6,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import VerifyEmail from "./pages/VerifyEmail";
 import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
+import LogHours from "./pages/LogHours";
 import Organizations from "./pages/Organizations";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <Route path="/verify" element={<VerifyEmail />} />
       <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/log" element={<LogHours />} />
         <Route path="/organizations" element={<Organizations />} />
         <Route path="/profile" element={<Profile />} />
       </Route>

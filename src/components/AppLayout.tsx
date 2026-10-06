@@ -11,6 +11,7 @@ export default function AppLayout() {
           <NavLink to="/" end>
             Dashboard
           </NavLink>
+          <NavLink to="/log">Log Hours</NavLink>
           <NavLink to="/organizations">Organizations</NavLink>
           <NavLink to="/profile">Profile</NavLink>
         </nav>

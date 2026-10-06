@@ -43,6 +43,27 @@ service cloud.firestore {
         && data.updatedAt == request.time;
     }
 
+    function isValidFlags(flags) {
+      return flags is list
+        && flags.size() <= 8
+        && flags.hasOnly(['notNonprofit', 'paid', 'internship', 'rsoInternal', 'politicalReligious', 'donation', 'participant', 'development']);
+    }
+
+    function isValidSession(uid, data) {
+      return data.keys().hasOnly(['orgId', 'date', 'hours', 'activity', 'flags', 'createdAt', 'updatedAt'])
+        && data.keys().hasAll(['orgId', 'date', 'hours', 'activity', 'flags', 'createdAt', 'updatedAt'])
+        && isRequiredString(data.orgId, 64)
+        && exists(/databases/$(database)/documents/users/$(uid)/organizations/$(data.orgId))
+        && data.date is string
+        && data.date.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+        && data.hours is number
+        && data.hours > 0
+        && data.hours <= 24
+        && isRequiredString(data.activity, 500)
+        && isValidFlags(data.flags)
+        && data.updatedAt == request.time;
+    }
+
     match /users/{uid} {
       allow get: if isOwner(uid);
       allow create, update: if isOwner(uid) && isValidProfile(request.resource.data);
@@ -54,6 +75,17 @@ service cloud.firestore {
           && request.resource.data.createdAt == request.time;
         allow update: if isOwner(uid)
           && isValidOrganization(request.resource.data)
+          && request.resource.data.createdAt == resource.data.createdAt;
+        allow delete: if isOwner(uid);
+      }
+
+      match /sessions/{sessionId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && isValidSession(uid, request.resource.data)
+          && request.resource.data.createdAt == request.time;
+        allow update: if isOwner(uid)
+          && isValidSession(uid, request.resource.data)
           && request.resource.data.createdAt == resource.data.createdAt;
         allow delete: if isOwner(uid);
       }

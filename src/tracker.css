@@ -1,0 +1,239 @@
+form.panel p {
+  margin: 0;
+}
+
+label.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: 400;
+}
+
+label.checkbox input {
+  width: auto;
+  margin: 3px 0 0;
+  accent-color: var(--accent);
+}
+
+.fieldset-hint {
+  margin: 0;
+}
+
+.disclosure {
+  display: grid;
+  gap: 12px;
+}
+
+button.disclosure-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+  text-align: left;
+}
+
+button.disclosure-toggle:hover {
+  background: var(--bg);
+}
+
+button.disclosure-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+.disclosure-toggle svg {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.disclosure-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.disclosure-count {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--warning-soft);
+  border: 1px solid var(--warning-border);
+  color: var(--warning-text);
+  font-size: 0.75rem;
+}
+
+.warning-box {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--warning-soft);
+  border: 1px solid var(--warning-border);
+  color: var(--warning-text);
+  font-size: 0.9rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 32px 0 12px;
+}
+
+.section-header .section-title {
+  margin: 0;
+}
+
+label.inline-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+label.inline-select select {
+  width: auto;
+  padding: 6px 10px;
+}
+
+.session-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.session-card {
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.session-card.flagged {
+  border-color: var(--warning-border);
+}
+
+.session-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.session-card h3 {
+  margin: 0 0 2px;
+  font-size: 1rem;
+}
+
+.session-meta {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.session-activity {
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.flag-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.85rem;
+  color: var(--warning-text);
+}
+
+.totals-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.totals-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.totals-list li:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.totals-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.progress-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.panel .progress-header h2 {
+  margin: 0;
+}
+
+.progress-count {
+  color: var(--muted);
+}
+
+.progress-count strong {
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.progress {
+  height: 12px;
+  margin: 12px 0;
+  overflow: hidden;
+  background: var(--accent-soft);
+  border-radius: 999px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-bar.complete {
+  background: var(--success);
+}
+
+.panel .warning-box {
+  margin-bottom: 12px;
+}
+
+form.panel .warning-box {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar,
+  .disclosure-toggle svg {
+    transition: none;
+  }
+}
