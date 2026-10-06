@@ -11,6 +11,7 @@ export default function AppLayout() {
           <NavLink to="/" end>
             Dashboard
           </NavLink>
+          <NavLink to="/organizations">Organizations</NavLink>
           <NavLink to="/profile">Profile</NavLink>
         </nav>
         <button type="button" className="secondary small" onClick={() => signOut(auth)}>

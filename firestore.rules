@@ -13,8 +13,12 @@ service cloud.firestore {
       return isVerifiedWmuUser() && request.auth.uid == uid;
     }
 
+    function isString(value, maxLength) {
+      return value is string && value.size() <= maxLength;
+    }
+
     function isRequiredString(value, maxLength) {
-      return value is string && value.size() > 0 && value.size() <= maxLength;
+      return isString(value, maxLength) && value.size() > 0;
     }
 
     function isValidProfile(data) {
@@ -29,9 +33,30 @@ service cloud.firestore {
         && data.updatedAt == request.time;
     }
 
+    function isValidOrganization(data) {
+      return data.keys().hasOnly(['name', 'contactName', 'mailingAddress', 'contactInfo', 'createdAt', 'updatedAt'])
+        && data.keys().hasAll(['name', 'contactName', 'mailingAddress', 'contactInfo', 'createdAt', 'updatedAt'])
+        && isRequiredString(data.name, 120)
+        && isString(data.contactName, 120)
+        && isString(data.mailingAddress, 300)
+        && isString(data.contactInfo, 150)
+        && data.updatedAt == request.time;
+    }
+
     match /users/{uid} {
       allow get: if isOwner(uid);
       allow create, update: if isOwner(uid) && isValidProfile(request.resource.data);
+
+      match /organizations/{orgId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && isValidOrganization(request.resource.data)
+          && request.resource.data.createdAt == request.time;
+        allow update: if isOwner(uid)
+          && isValidOrganization(request.resource.data)
+          && request.resource.data.createdAt == resource.data.createdAt;
+        allow delete: if isOwner(uid);
+      }
     }
   }
 }
